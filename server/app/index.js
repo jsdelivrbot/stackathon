@@ -22,6 +22,7 @@ app.use('/api', require('../routes'));
 
 // All other routes
 app.get('*', function (req, res) {
+	console.log('hitting this * route');
   res.sendFile(path.join(__dirname, '../../index.html'));
 });
 
