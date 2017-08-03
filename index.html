@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js"></script>
+	</head>
+	<body>
+		<input type="text" id="url" placeholder="Image URL"/>
+		<input type="button" id="go_button" value="Run"/>
+		<div id="ocr_status"> </div>
+		<div id="ocr_results"> </div>
+		<script>
+			function runOCR(url) {
+				let textToBeParsed; 
+				Tesseract.recognize(url)
+				.then(function(result) {
+					textToBeParsed = result.text;
+					parsed = textToBeParsed.replace(/[^a-z A-Z0-9.$]/g, '');
+					parsedArray = parsed.split(' ').map(word => word.toLowerCase());
+					console.log('parsed array', parsedArray);
+					[prices, priceIndices] = recognizePrices(parsedArray);
+					console.log('prices: ', prices);
+					console.log('price indices: ', priceIndices);
+					document.getElementById("ocr_results")
+					.innerText = parsed;
+				})
+				.progress(function(result) {
+					document.getElementById("ocr_status")
+					.innerText = result["status"] + " (" + (result["progress"] * 100) + "%)";
+				})
+				.catch(err => console.error(err))
+				.then(res => console.log(res));
+				return textToBeParsed;
+			}
+
+			function recognizePrices(arr){
+				let fin = [];
+				let finInd = [];
+				for (let i in arr){
+					let val = arr[i];
+					if (val.indexOf('.') !== -1){
+						let testArr = val.split('.');
+						if (testArr.length === 2 && testArr[1].length === 2 && Number(testArr[0])){
+							fin.push(Number(val));
+							finInd.push(Number(i));
+						}
+					}
+				}
+				return [fin, finInd];
+			}
+
+			function recognizeItems(arr){
+				
+			}
+
+			document.getElementById("go_button")
+			.addEventListener("click", function(e) {
+				var url = document.getElementById("url").value;
+				runOCR(url);
+			})
+		</script>
+	</body>
+</html>
+
