@@ -7,7 +7,7 @@ const Navbar = () => {
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
           <ul className="nav navbar-nav">
-            <li><Link to='/'>Splitter</Link></li>
+            <li><Link to='/home'>Splitter</Link></li>
           	<li><Link to='/submit-receipt'>New</Link></li>
           </ul>
         </div>
