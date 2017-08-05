@@ -7,6 +7,7 @@ import {Main, Home, SubmitReceipt, Splitting, FAQ, Split} from './react';
 /**
  * COMPONENT
  */
+
 /**
 STATE: 
 splitItems : {9pizza: [1, 2, 3], 6soda: [1,3, 2], 3candy: [3], 4gum: [2,1 ,3]} 
@@ -27,6 +28,13 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
     this.handleSubmit = this.handleSubmit.bind(this);
     this.divideTotal = this.divideTotal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.addParticipants = this.addParticipants.bind(this);
+  }
+
+  addParticipants(participants){
+    console.log('am I hitting??', participants);
+    this.state.participants = participants;
+    console.log('participants? ', this.state.participants);
   }
 
   handleChange(e) {
@@ -62,7 +70,7 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
       <Router history={history}>
         <Main>
           <Switch>
-            <Route path="/submit-receipt" component={SubmitReceipt}/>
+            <Route path="/submit-receipt" render={()=> <SubmitReceipt addParticipants={this.addParticipants} />} />
             <Route path="/submit-form" render={()=> <Splitting receipt={this.state.receipt} participants={this.state.participants} handleChange={this.handleChange} handleClick={this.handleClick} handleSubmit={this.handleSubmit} />} />
             <Route path='/home' component={Home} />
             <Route path='/faq' component={FAQ} />

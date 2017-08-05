@@ -12,7 +12,7 @@ class SubmitReceipt extends Component{
 		}
 		this.handleClick = this.handleClick.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmibt = this.handleSubmit.bind(this);
+		// this.handleSubmit = this.handleSubmit.bind(this);
 		this.runOCR = this.runOCR.bind(this);
 		// this.recognizePrices = this.recognizePrices.bind(this);
 	}
@@ -56,20 +56,16 @@ class SubmitReceipt extends Component{
 		console.log(this.state.url)
 	}
 
-	handleSubmit(e){
-
-	}
-
 	render(){
 		return (
 			<div>
-					<fieldset>
-						<legend>Receipt</legend>
-						<input type="text" id="url" placeholder="Receipt URL" onChange={this.handleChange}/>
-						<Link to='/submit-form'><input type="button" id="go_button" value="Run" onClick={(e)=>this.handleClick(e)}/></Link>
-					</fieldset>
-					<HowManyPeople />
-					<button type='submit' className='btn btn-success'>Submit</button>
+				<fieldset>
+					<legend>Receipt</legend>
+					<input type="text" id="url" placeholder="Receipt URL" onChange={this.handleChange}/>
+					<Link to='/submit-form'><input type="button" id="go_button" value="Run" onClick={(e)=>this.handleClick(e)}/></Link>
+				</fieldset>
+				<HowManyPeople addParticipants={this.props.addParticipants}/>
+				<button type='submit' className='btn btn-success'>Submit</button>
 			</div>
 		)
 	}

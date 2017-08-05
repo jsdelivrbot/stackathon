@@ -40,6 +40,7 @@ const Splitting = (props) =>{
 	let handleChange = props.handleChange;
 	let handleClick = props.handleClick;
 	let handleSubmit = props.handleSubmit;
+	console.log('received participants: ', participants);
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
