@@ -42,6 +42,7 @@ class SubmitReceipt extends Component{
 			doneParsing: true
 		});
 		console.log('new state? ', this.state.parsed);
+		this.props.addReceipt(this.state.parsed);
 	}
 
 	handleClick(e){

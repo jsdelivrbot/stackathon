@@ -12,13 +12,14 @@ import {Main, Home, SubmitReceipt, Splitting, FAQ, Split, HowManyPeople} from '.
 STATE: 
 splitItems : {9pizza: [1, 2, 3], 6soda: [1,3, 2], 3candy: [3], 4gum: [2,1 ,3]} 
 dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.333333333333332 }
+receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
 **/
 
  class Routes extends Component {
   constructor(){
     super();
     this.state = {
-      receipt: {'4.5' : 'pizza', '9.0': 'soda', '1.0' : 'hamburger'},
+      receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
       participants : [],
       splitItems : {},
       dividedTotal : {}
@@ -34,7 +35,9 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
   }
 
   addReceipt(receipt){
+    console.log('setting receipt on routes state');
     this.setState({receipt});
+    console.log('new receipt added', this.state.receipt);
   }
 
   addParticipants(participants){
