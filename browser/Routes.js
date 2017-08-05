@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Router} from 'react-router'
 import {Route, Switch, Redirect} from 'react-router-dom'
 import history from './history'
-import {Main, Home, SubmitReceipt, Splitting, FAQ, Split} from './react';
+import {Main, Home, SubmitReceipt, Splitting, FAQ, Split, HowManyPeople} from './react';
 
 /**
  * COMPONENT
@@ -18,7 +18,7 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
   constructor(){
     super();
     this.state = {
-      receipt: ['4.5 pizza', '9.0 soda', '1 hamburger'],
+      receipt: {'4.5' : 'pizza', '9.0': 'soda', '1.0' : 'hamburger'},
       participants : [],
       splitItems : {},
       dividedTotal : {}
@@ -29,19 +29,44 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
     this.divideTotal = this.divideTotal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addParticipants = this.addParticipants.bind(this);
+    this.addSplitItems = this.addSplitItems.bind(this);
+    this.addReceipt = this.addReceipt.bind(this);
+  }
+
+  addReceipt(receipt){
+    this.setState({receipt});
   }
 
   addParticipants(participants){
-    console.log('am I hitting??', participants);
-    this.state.participants = participants;
-    console.log('participants? ', this.state.participants);
+    this.setState({participants}); 
+  }
+
+  addSplitItems(splitItems){
+    console.log('what am i receiving?', splitItems);
+    this.state.splitItems = splitItems;
+    // let dividedTotal = divideTotal(this.state.splitItems);
+    // this.setState({dividedTotal});
+    console.log('what do my split itmes look like?', this.state.splitItems);
+    // console.log('divided properly??', this.state.dividedTotal);
   }
 
   handleChange(e) {
-    e.target.on = !e.target.on;
+    console.log('event: ', e);
+    console.log('target: ', e.target);
+    console.log('target type: ', typeof e.target);
+    if (e.target.value === 'off' || !e.target.value){
+      e.target.value = 'on';
+    } else {
+      e.target.value = 'off';
+    }
   }
 
   handleClick(e){
+    if (e.target.value === 'off' || !e.target.value){
+      e.target.value = 'on';
+    } else {
+      e.target.value = 'off';
+    } 
     console.log('clicked!');
     console.log('event', e);
     console.log('target', e.target);
@@ -53,6 +78,7 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
   }
 
   divideTotal(items){
+    console.log('i am getting hit?');
   let divided = {};
   for (let i of Object.keys(items)){
     for (let j of items[i]){
@@ -70,11 +96,12 @@ dividedTotal : { '1': 6.333333333333333, '2': 6.333333333333333, '3': 9.33333333
       <Router history={history}>
         <Main>
           <Switch>
-            <Route path="/submit-receipt" render={()=> <SubmitReceipt addParticipants={this.addParticipants} />} />
-            <Route path="/submit-form" render={()=> <Splitting receipt={this.state.receipt} participants={this.state.participants} handleChange={this.handleChange} handleClick={this.handleClick} handleSubmit={this.handleSubmit} />} />
+            <Route path="/submit-receipt" render={()=> <SubmitReceipt addParticipants={this.addParticipants} addReceipt={this.addReceipt}/>} />
+            <Route path="/submit-form" render={()=> <Splitting receipt={this.state.receipt} addSplitItems={this.addSplitItems} participants={this.state.participants} handleClick={this.handleClick} />} />
             <Route path='/home' component={Home} />
             <Route path='/faq' component={FAQ} />
             <Route path='/split' render={()=><Split participants={this.state.participants} dividedTotal={this.state.dividedTotal}/>} />
+            <Route path='/test' component={HowManyPeople} />
           </Switch>
         </Main>
       </Router>
