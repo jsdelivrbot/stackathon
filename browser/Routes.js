@@ -26,7 +26,7 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
     this.divideTotal = this.divideTotal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.addParticipants = this.addParticipants.bind(this);
@@ -35,9 +35,7 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
   }
 
   addReceipt(receipt){
-    console.log('setting receipt on routes state');
     this.setState({receipt});
-    console.log('new receipt added', this.state.receipt);
   }
 
   addParticipants(participants){
@@ -45,18 +43,11 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
   }
 
   addSplitItems(splitItems){
-    console.log('what am i receiving?', splitItems);
     this.state.splitItems = splitItems;
-    // let dividedTotal = divideTotal(this.state.splitItems);
-    // this.setState({dividedTotal});
-    console.log('what do my split itmes look like?', this.state.splitItems);
-    // console.log('divided properly??', this.state.dividedTotal);
+    this.divideTotal();
   }
 
   handleChange(e) {
-    console.log('event: ', e);
-    console.log('target: ', e.target);
-    console.log('target type: ', typeof e.target);
     if (e.target.value === 'off' || !e.target.value){
       e.target.value = 'on';
     } else {
@@ -70,29 +61,26 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
     } else {
       e.target.value = 'off';
     } 
-    console.log('clicked!');
-    console.log('event', e);
-    console.log('target', e.target);
   }
 
-  handleSubmit(){
-    console.log('submitted');
-    divideTotal(this.state.splitItems);
-  }
+  // handleSubmit(){
+  //   divideTotal(this.state.splitItems);
+  // }
 
-  divideTotal(items){
-    console.log('i am getting hit?');
-  let divided = {};
-  for (let i of Object.keys(items)){
-    for (let j of items[i]){
-      if (!divided[j]){
-        divided[j] = 0;
+  divideTotal(){
+    let items = this.state.splitItems;
+    let divided = {};
+    for (let i of Object.keys(items)){
+      let price = i.split(' ').filter(item => isPrice(item));
+      for (let j of items[i]){
+        if (!divided[j]){
+          divided[j] = 0;
+        }
+        divided[j]+= Number(price)/parseFloat(items[i].length);
       }
-      divided[j]+= Number(i)/parseFloat(items[i].length);
     }
-  }
-  this.state.dividedTotal = divided;
-};
+    this.state.splitItems = divided;
+  };
 
   render(){
     return (
@@ -103,13 +91,18 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
             <Route path="/submit-form" render={()=> <Splitting receipt={this.state.receipt} addSplitItems={this.addSplitItems} participants={this.state.participants} handleClick={this.handleClick} />} />
             <Route path='/home' component={Home} />
             <Route path='/faq' component={FAQ} />
-            <Route path='/split' render={()=><Split participants={this.state.participants} dividedTotal={this.state.dividedTotal}/>} />
+            <Route path='/split' render={()=><Split participants={this.state.participants} dividedTotal={this.state.splitItems}/>} />
             <Route path='/test' component={HowManyPeople} />
           </Switch>
         </Main>
       </Router>
     )
   }
+}
+
+function isPrice(price){
+  let splitP = String(price).split('.');
+  return splitP.length === 2 && splitP[1].length === 2 && Number(splitP[0]) && price.indexOf('.') !== -1; 
 }
 
 export default Routes;
