@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {HowManyPeople} from './index';
 
 class SubmitReceipt extends Component{
@@ -11,11 +11,14 @@ class SubmitReceipt extends Component{
 			parsed : null,
 			doneParsing : false,
 			redirect : false,
-			submitted : false
+			submitted : false,
+			participantsSubmitted: false
 		}
 		this.handleClick = this.handleClick.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.runOCR = this.runOCR.bind(this);
+		this.submitted = this.submitted.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	async runOCR(url){
@@ -23,26 +26,25 @@ class SubmitReceipt extends Component{
 		.progress(function(result) {
 			console.log(result["status"] + " (" + (result["progress"] * 100) + "%)")
 		})
-		.catch(err => console.error('errors: ', err));
+		.catch(err => alert('Error: ', err));
 
-		let textToBeParsed = result.text;
-		let parsed = textToBeParsed.replace(/[^a-z A-Z0-9.$]/g, '');
+		let parsed = result.text.replace(/[^a-z A-Z0-9.$]/g, '');
 		let parsedArray = parsed.split(' ').map(word => word.toLowerCase());
 		let sepItems = {};
 		let itemList = [];
 		parsedArray.forEach(item=>{
-			if (!isPrice(item)){itemList.push(item)}
-				else {
-					sepItems[item] = itemList;
-					itemList = [];
-				}
-			});
+			if (!isPrice(item)){
+				itemList.push(item)
+			} 
+			else {
+				sepItems[item] = itemList;
+				itemList = [];
+			}
+		});
 		this.setState({
 			parsed : sepItems,
 			doneParsing: true
 		});
-		console.log('new state? ', this.state.parsed);
-		this.props.addReceipt(this.state.parsed);
 	}
 
 	handleClick(e){
@@ -58,15 +60,22 @@ class SubmitReceipt extends Component{
 
 	handleSubmit(e){
 		e.preventDefault();
-		this.props.addReceiptItems(this.state.parsedArray);
+		this.props.addReceipt(this.state.parsed);
 		this.setState({
 			redirect : true
+		});
+	}
+
+	submitted(){
+		this.setState({
+			participantsSubmitted : true
 		});
 	}
 
 	render(){
 		let doneParsing = this.state.doneParsing;
 		let submitted = this.state.submitted;
+		let pSubmitted = this.state.participantsSubmitted;
 		if (this.state.redirect){
 			return <Redirect to="/submit-form"/>
 		}
@@ -77,9 +86,9 @@ class SubmitReceipt extends Component{
 					<input type="text" id="url" placeholder="Receipt URL" onChange={this.handleChange}/>
 					<input type="button" id="go_button" value="Run" onClick={(e)=>this.handleClick(e)}/>
 				</fieldset>
-				<HowManyPeople addParticipants={this.props.addParticipants}/>
+				{!pSubmitted ? <HowManyPeople addParticipants={this.props.addParticipants} submitted={this.submitted}/> : <p>Participants successfully submitted</p> }
 				<form onSubmit={this.handleSubmit}>
-					{submitted ? doneParsing ?  <button type='submit' className="btn btn-success">Continue</button> : <p>Currently scanning your receipt...</p> : null }
+					{submitted ? doneParsing ? !pSubmitted ? <p>Please submit participants!</p> : <button type='submit' className="btn btn-success">Continue</button> : <p>Currently scanning your receipt...</p> : null }
 				</form>
 			</div>
 		)
@@ -89,22 +98,6 @@ class SubmitReceipt extends Component{
 function isPrice(item){
 	let itemSplit = item.split('.');
 	return item.indexOf('.') !== -1 && itemSplit.length === 2 && itemSplit[1].length === 2 && Number(itemSplit[0])!== NaN;
-}
-
-function recognizePrices(arr){
-	let fin = [];
-	let finInd = [];
-	for (let i in arr){
-		let val = arr[i];
-		if (val.indexOf('.') !== -1){
-			let testArr = val.split('.');
-			if (testArr.length === 2 && testArr[1].length === 2 && Number(testArr[0])){
-				fin.push(Number(val));
-				finInd.push(Number(i));
-			}
-		}
-	}
-	return [fin, finInd];
 }
 
 export default SubmitReceipt;

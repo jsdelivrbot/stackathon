@@ -26,9 +26,7 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
     this.divideTotal = this.divideTotal.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.addParticipants = this.addParticipants.bind(this);
     this.addSplitItems = this.addSplitItems.bind(this);
     this.addReceipt = this.addReceipt.bind(this);
@@ -62,10 +60,6 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
       e.target.value = 'off';
     } 
   }
-
-  // handleSubmit(){
-  //   divideTotal(this.state.splitItems);
-  // }
 
   divideTotal(){
     let items = this.state.splitItems;
