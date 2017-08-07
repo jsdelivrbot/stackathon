@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
-import { HashRouter , Route, Switch } from 'react-router-dom';
-import {Navbar, Home} from './index';
-import {Router} from 'react-router';
-import history from '../history';
+import React from 'react';
+import {Navbar} from './index';
 
 const Main = (props) => {
-
   const {children} = props;
 
   return (

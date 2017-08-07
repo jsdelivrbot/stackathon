@@ -54,12 +54,13 @@ class Splitting extends Component {
 			<div>
 				<form onSubmit={this.handleSubmit}>
 					{rKeys.map(key => {
+						console.log(typeof receipt[key]);
 					return ( 
 						<div name={key} key={key}>
-							<h3>{receipt[key]} {key}</h3>
+							<h3>{receipt[key]}: {key}</h3>
 							{participants.map(participant => {
 								return (
-									<div key={participant}><input type='checkbox' name={receipt[key] + " " + key} onClick={handleClick} value={participant}/>{participant}<br/></div>
+									<div key={participant}><input type='checkbox' name={receipt[key]+ " " + key} onClick={handleClick} value={participant}/>{participant}<br/></div>
 								)
 							})}
 						</div>

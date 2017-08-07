@@ -17,9 +17,6 @@ app.use(require('./session.middleware'));
 // Initializing Passport [passport is authentication middleware]
 app.use(require('./passport.middleware'));
 
-// Back-end routes
-app.use('/api', require('../routes'));
-
 // All other routes
 app.get('*', function (req, res) {
 	console.log('hitting this * route');

@@ -6,8 +6,6 @@ class HowManyPeople extends Component{
 		super()
 		this.state = {
 			inputValue : ''
-			// ,
-			// redirect : false
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,18 +29,12 @@ class HowManyPeople extends Component{
 		this.props.submitted();
 		this.setState({
 			inputValue: ''
-			// ,
-			// redirect : true
 		});
 	}
 
 	render(){
 		let num = Number(this.state.inputValue);
 		let numArr = [...Array(num).keys()];
-		console.log('rerendering');
-		// if (this.state.redirect) {
-		// 	return <Redirect to="/submit-form"/>
-		// }
 		return (
 			<div>
 				<form onSubmit={this.handleSubmit}>

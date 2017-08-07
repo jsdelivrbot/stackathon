@@ -1,4 +1,5 @@
-localSecret.js
-
 bundle.js
 node_modules
+
+parser.js
+bundle.js.map

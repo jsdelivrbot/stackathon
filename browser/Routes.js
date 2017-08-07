@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Router} from 'react-router'
 import {Route, Switch, Redirect} from 'react-router-dom'
 import history from './history'
-import {Main, Home, SubmitReceipt, Splitting, FAQ, Split, HowManyPeople} from './react';
+import {Main, Home, SubmitReceipt, Splitting, FAQ, Split} from './react';
 
 /**
  * COMPONENT
@@ -83,10 +83,9 @@ receipt: {'4.50' : 'pizza', '9.00': 'soda', '1.00' : 'hamburger'},
           <Switch>
             <Route path="/submit-receipt" render={()=> <SubmitReceipt addParticipants={this.addParticipants} addReceipt={this.addReceipt}/>} />
             <Route path="/submit-form" render={()=> <Splitting receipt={this.state.receipt} addSplitItems={this.addSplitItems} participants={this.state.participants} handleClick={this.handleClick} />} />
-            <Route path='/home' component={Home} />
             <Route path='/faq' component={FAQ} />
             <Route path='/split' render={()=><Split participants={this.state.participants} dividedTotal={this.state.splitItems}/>} />
-            <Route path='/test' component={HowManyPeople} />
+            <Route path='/' component={Home} />
           </Switch>
         </Main>
       </Router>
